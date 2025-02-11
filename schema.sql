@@ -26,9 +26,9 @@ CREATE TABLE posts (
 );
 
 CREATE TABLE users (
-    id  	    INTEGER PRIMARY KEY,
-    email           TEXT NOT NULL, 
-    phone           TEXT NOT NULL
+	id	INTEGER PRIMARY KEY,
+	email	TEXT NOT NULL, 
+	phone	TEXT NOT NULL
  		    
 );
 
