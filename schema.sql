@@ -1,10 +1,8 @@
--- 
-
-
-
+--
 
 CREATE TABLE accounts (
-    username        TEXT PRIMARY KEY
+    username        TEXT PRIMARY 
+    password        TEXT NOT NULL,
 );
 
 CREATE TABLE follows (
@@ -21,15 +19,15 @@ CREATE TABLE posts (
     username        TEXT NOT NULL,
     message         TEXT NOT NULL,
     posted_at       DATETIME NOT NULL,
+    likes           INTEGER NOT NULL,
 
     FOREIGN KEY (username) REFERENCES accounts (username)
 );
 
 CREATE TABLE users (
-	id	INTEGER PRIMARY KEY,
+	id	TEXT PRIMARY KEY,
 	email	TEXT NOT NULL, 
 	phone	TEXT NOT NULL
  		    
 );
-
 
