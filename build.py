@@ -1,12 +1,17 @@
 import sqlite3
+import subprocess
 from queries import *
 
+DB_NAME = 'social.db'
+SCHEMA_FILE = 'schema.sql'
 def main():
-    db = sqlite3.connect('social.db')
+    subprocess.run(["rm", "-f", DB_NAME], check=True)
+    subprocess.run(f"sqlite3 {DB_NAME} < {SCHEMA_FILE}", shell=True, check=True)
+    db = sqlite3.connect(DB_NAME)
     with db:
         make_accounts(db)
 
 def make_accounts(db):
-    add_account(db, 'firstpost')
+    add_account(db, 'secondpost')
 
 main()
