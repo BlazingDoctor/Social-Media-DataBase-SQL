@@ -42,8 +42,13 @@ def populate_database():
 
     # Like posts
     social.like_post("johnny", 1)
+    social.like_post("johnny", 2)
+
     social.like_post("alicej", 1)
     social.like_post("jane_d", 2)
+
+    #show liked posts per user
+    social.show_likes_for_user("johnny")
 
     # Report a post
     social.report_post("alicej", 2, "Spam content")

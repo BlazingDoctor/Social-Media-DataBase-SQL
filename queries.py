@@ -65,6 +65,40 @@ class SocialNetwork:
         self.conn.commit()
         print(f"{username} liked post {post_id}")
 
+    def show_likes_for_user(self, username, post_id=None):
+
+        # Verify the user exists
+        self.cursor.execute("SELECT account_id FROM Accounts WHERE username = ?", (username,))
+        account = self.cursor.fetchone()
+        if not account:
+            print(f"Account not found: {username}")
+            return
+        
+        account_id = account[0]
+        # Get all posts that this user has liked with post content and original poster
+        self.cursor.execute("""
+            SELECT p.post_id, p.content, a.username as post_author, p.timestamp
+            FROM Likes l
+            JOIN Posts p ON l.post_id = p.post_id
+            JOIN Accounts a ON p.account_id = a.account_id
+            WHERE l.account_id = ?
+            ORDER BY p.timestamp DESC
+        """, (account_id,))
+        
+        liked_posts = self.cursor.fetchall()
+        
+        if not liked_posts:
+            print(f"{username} hasn't liked any posts yet.")
+            return
+        
+        print(f"Posts liked by {username}:")
+        for post in liked_posts:
+            post_id, content, post_author, timestamp = post
+            print(f"- Post {post_id} by {post_author} at {timestamp}")
+            print(f"  Content: {content}")
+            print()        
+
+
     def report_post(self, username, post_id, reason):
         """Allows an account to report a post."""
         self.cursor.execute("SELECT account_id FROM Accounts WHERE username = ?", (username,))
