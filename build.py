@@ -64,6 +64,17 @@ def populate_database():
     # Report a post
     social.report_post("alicej", 2, "Spam content")
 
+    # Testing the get_posts_likes join function 
+    print("\n--- Testing get_posts_likes() ---")
+    for post_id in range(1, 4):
+	likes = social.get_post_likes(post_id)
+        print(f"\nLikes for Post {post_id}:")
+	if likes:
+		for like in likes: 
+			print(f"  - Like ID: {like['like_id']}, Liked by:{like['like_by']}") 
+	else: 
+		print("    No likes on this post.")
+
     # Close connection
     social.close()
 

@@ -131,5 +131,25 @@ class SocialNetwork:
         self.conn.commit()
         print(f"{username} reported post {post_id} for {reason}")
 
+    """Brooke's interesting query which sees how many likes are on a post and tells what accounts liked it"""
+    def get_post_likes(self, post_id):
+        """Retrieve all likes on a specific post, showing who liked it."""
+        self.cursor.execute("""
+            SELECT Likes.like_id, Accounts.username 
+            FROM Likes
+            JOIN Accounts ON Likes.account_id = Accounts.account_id
+            WHERE Likes.post_id = ?;
+        """, (post_id,))
+        
+        likes = self.cursor.fetchall()
+        
+        if not likes:
+            print(f"No likes found for post {post_id}.")
+            return []
+
+        return [{"like_id": like[0], "liked_by": like[1]} for like in likes]
+	
+   
+
     def close(self):
         self.conn.close()
