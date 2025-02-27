@@ -24,11 +24,18 @@ def populate_database():
     social.create_user("jane.doe@utahtech.edu")
     social.create_user("john.smith@utahtech.edu")
     social.create_user("alice.jones@utahtech.edu")
+    social.create_user("aldent.dalain@utahtech.edu")
+
 
     # Create accounts
     social.create_account("jane.doe@utahtech.edu", "jane_d")
     social.create_account("john.smith@utahtech.edu", "johnny")
     social.create_account("alice.jones@utahtech.edu", "alicej")
+    social.create_account("aldent.dalain@utahtech.edu", "aldent")
+    
+    #second account test
+    social.create_account("aldent.dalain@utahtech.edu", "aldent2")
+
 
     # Follow relationships
     social.follow_account("jane_d", "johnny")
@@ -43,12 +50,16 @@ def populate_database():
     # Like posts
     social.like_post("johnny", 1)
     social.like_post("johnny", 2)
-
+    social.like_post("aldent2",2)
     social.like_post("alicej", 1)
     social.like_post("jane_d", 2)
 
     #show liked posts per user
     social.show_likes_for_user("johnny")
+
+    social.check_post_liked("aldent",2)
+    social.check_post_liked("aldent2",2)
+
 
     # Report a post
     social.report_post("alicej", 2, "Spam content")

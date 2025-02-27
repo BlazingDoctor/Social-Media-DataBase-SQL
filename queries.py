@@ -66,14 +66,12 @@ class SocialNetwork:
         print(f"{username} liked post {post_id}")
 
     def show_likes_for_user(self, username, post_id=None):
-
         # Verify the user exists
         self.cursor.execute("SELECT account_id FROM Accounts WHERE username = ?", (username,))
         account = self.cursor.fetchone()
         if not account:
             print(f"Account not found: {username}")
             return
-        
         account_id = account[0]
         # Get all posts that this user has liked with post content and original poster
         self.cursor.execute("""
@@ -96,8 +94,30 @@ class SocialNetwork:
             post_id, content, post_author, timestamp = post
             print(f"- Post {post_id} by {post_author} at {timestamp}")
             print(f"  Content: {content}")
-            print()        
+            print() #/n    
 
+    def check_post_liked(self, username, post_id):
+         # Verify the user exists
+        self.cursor.execute("SELECT account_id FROM Accounts WHERE username = ?", (username,))
+        account = self.cursor.fetchone()
+        if not account:
+            print(f"Account not found: {username}")
+            return
+        account_id = account[0]
+        #check if post was liked by user
+        if post_id:
+            self.cursor.execute("""
+                SELECT 1
+                FROM Likes
+                WHERE account_id = ? AND post_id = ?
+            """, (account_id, post_id))
+            
+            liked = self.cursor.fetchone()
+            if liked:
+                print(f"{username} has liked post {post_id}")
+            else:
+                print(f"{username} has not liked post {post_id}")
+            return
 
     def report_post(self, username, post_id, reason):
         """Allows an account to report a post."""
