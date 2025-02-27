@@ -88,7 +88,6 @@ class SocialNetwork:
         if not liked_posts:
             print(f"{username} hasn't liked any posts yet.")
             return
-        
         print(f"Posts liked by {username}:")
         for post in liked_posts:
             post_id, content, post_author, timestamp = post
@@ -133,6 +132,13 @@ class SocialNetwork:
 
     """Brooke's interesting query which sees how many likes are on a post and tells what accounts liked it"""
     def get_post_likes(self, post_id):
+        # Verify the post exists
+        self.cursor.execute("SELECT post_id FROM Posts WHERE post_id = ?", (post_id,))
+        post = self.cursor.fetchone()
+        if not post:
+            print("Post not found for get_post_likes")
+            return
+        post_id = post[0]
         """Retrieve all likes on a specific post, showing who liked it."""
         self.cursor.execute("""
             SELECT Likes.like_id, Accounts.username 
