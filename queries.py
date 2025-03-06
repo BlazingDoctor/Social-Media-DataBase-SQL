@@ -186,7 +186,30 @@ class SocialNetwork:
 
         return [{"like_id": like[0], "liked_by": like[1]} for like in likes]
 	
-   
+    """Just kidding this is actually my interesting query made to show suggested accounts to follow."""   
+    def suggest_accounts_to_follow(self, username):
+	# Suggest accounts for a user to follow based on mutual connections
+        self.cursor.execute("""
+	    SELECT suggested_user, mutual_follows
+	    FROM SuggestedFollows
+	    WHERE user = ?
+	    ORDER BY mutual_follows DESC
+	    LIMIT 5;
+        """, (username,))
+    
+        suggestions = self.cursor.fetchall()
+
+        if not suggestions:
+            print(f"No suggestions found for {username}.")
+            return []
+
+        print(f"\nSuggested accounts for {username} to follow:")
+        for suggested_user, mutual_followers in suggestions:
+            print(f"- {suggested_user} (followed by {mutual_followers} people you follow)")
+    
+        return suggestions
+
+
 
     def close(self):
         self.conn.close()

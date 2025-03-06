@@ -56,3 +56,20 @@ CREATE TABLE Reports (
     FOREIGN KEY (post_id) REFERENCES Posts(post_id) ON DELETE CASCADE,
     FOREIGN KEY (account_id) REFERENCES Accounts(account_id) ON DELETE CASCADE
 );
+
+-- A dynamic view that shows Suggested Accounts to Follow
+-- Actual special query because the one I made before was just a basic join
+CREATE VIEW SuggestedFollows AS
+WITH FollowedByUser AS (
+    SELECT f1.follower_id, f2.followed_id
+    FROM Followers f1
+    JOIN Followers f2 ON f1.followed_id = f2.follower_id
+    WHERE f1.follower_id <> f2.followed_id
+)
+SELECT a1.username AS user, a2.username AS suggested_user, COUNT(*) AS mutual_follows
+FROM FollowedByUser fb
+JOIN Accounts a1 ON fb.follower_id = a1.account_id
+JOIN Accounts a2 ON fb.followed_id = a2.account_id
+WHERE fb.followed_id NOT IN (SELECT followed_id FROM Followers WHERE follower_id = fb.follower_id)
+GROUP BY a1.username, a2.username
+ORDER BY mutual_follows DESC;

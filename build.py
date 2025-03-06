@@ -75,8 +75,18 @@ def populate_database():
         else: 
             print("No likes on this post.")
 
+    test_special_queries(social)
+
     # Close connection
     social.close()
+
+# Testing the special function
+def test_special_queries(social):
+    """Runs test queries for suggested follows and most liked posts from non-followed accounts."""
+    print("\n--- Suggested Follows ---")
+    social.suggest_accounts_to_follow("johnny")
+
+
 
 if __name__ == "__main__":
     main()
