@@ -95,6 +95,37 @@ class SocialNetwork:
             print(f"  Content: {content}")
             print() #/n    
 
+
+    def get_posts_for_user(self, username):
+        # Verify the user exists
+        self.cursor.execute("SELECT account_id FROM Accounts WHERE username = ?", (username,))
+        account = self.cursor.fetchone()
+        if not account:
+            print(f"Account not found: {username}")
+            return
+        account_id = account[0]
+
+        self.cursor.execute("""
+            SELECT p.post_id, p.content, a.username as post_author, p.timestamp
+            FROM Posts p
+            JOIN Accounts a ON p.account_id = a.account_id
+            WHERE p.account_id = ?
+            ORDER BY p.timestamp DESC
+        """, (account_id,))
+        
+        user_posts = self.cursor.fetchall()
+        
+        if not user_posts:
+            print(f"{username} hasn't posted yet.")
+            return
+        print(f"Posts authored by {username}:")
+        for post in user_posts:
+            post_id, content, post_author, timestamp = post
+            print(f"- Post {post_id} by {post_author} at {timestamp}")
+            print(f"  Content: {content}")
+            print() #/n    
+
+
     def check_post_liked(self, username, post_id):
          # Verify the user exists
         self.cursor.execute("SELECT account_id FROM Accounts WHERE username = ?", (username,))
